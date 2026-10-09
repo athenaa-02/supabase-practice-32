@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm, type ErrorMessageProps } from "react-hook-form";
 import { supabase } from "./supabase/supabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -10,7 +10,7 @@ interface PersonType {
 }
 
 function Practice() {
-  const [people, setPerson] = useState<PersonType[] >([]);
+  const [people, setPerson] = useState<PersonType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<PostgrestError | undefined>();
 
@@ -48,29 +48,28 @@ function Practice() {
   }, []);
 
   async function sendPerson(d: PersonType) {
+    
     console.log(d);
     try {
       const { data, error } = await supabase.from("person").insert(d).select();
       if (error) {
-        setError(error);
+        
+        throw new Error("We couldn't complete that. Please try again in a moment.") 
       }
       console.log(data);
     } catch (error) {
-      console.log(error);
+      console.log(error)
+      setError(error as PostgrestError)
     }
   }
 
-  async function deletePerson(id:number | undefined) {
+  async function deletePerson(id: number | undefined) {
     try {
-
-      const {data, error} = await supabase.from('person').delete().eq('id', id)
-
+      const { error } = await supabase.from("person").delete().eq("id", id);
     } catch (error) {
       console.log(error);
     }
   }
-
- 
 
   return (
     <>
@@ -103,19 +102,29 @@ function Practice() {
 
       {people &&
         people.map((person) => (
-          <div   style={{ border: "1px solid black", padding:'10px', gap:'10px', width: "120px", display:'flex' }}>
-            <button onClick={() =>{
-              deletePerson(person.id)
-              getPerson()
-              window.location.href = '/'
-              }}>x</button>
           <div
             key={person.id}
-          
+            style={{
+              border: "1px solid black",
+              padding: "10px",
+              gap: "10px",
+              width: "120px",
+              display: "flex",
+            }}
           >
-            <h3 style={{marginTop:'5px'}}>{person.username}</h3>
-            <span>score: {person.score}</span>
-          </div>
+            <button
+              onClick={async () => {
+                await deletePerson(person.id);
+                await getPerson();
+               
+              }}
+            >
+              x
+            </button>
+            <div>
+              <h3 style={{ marginTop: "5px" }}>{person.username}</h3>
+              <span>score: {person.score}</span>
+            </div>
           </div>
         ))}
     </>

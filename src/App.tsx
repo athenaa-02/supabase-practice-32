@@ -1,5 +1,6 @@
 import Test from "./Test.jsx";
 import Practice from "./Practice.tsx";
+import Parent from "./Parent.jsx";
 
 function App() {
 //   let text = "fsagddsfdskjhfds";
@@ -258,9 +259,9 @@ function App() {
 
 
 
-
   return (
     <>
+    <Parent/>
       <Practice></Practice>
     </>
   );
