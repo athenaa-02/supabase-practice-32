@@ -11,12 +11,13 @@ interface PersonType {
 
 function Practice() {
   const [people, setPerson] = useState<PersonType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<PostgrestError | undefined>();
 
   const { register, handleSubmit, reset } = useForm<PersonType>();
 
   async function getPerson() {
+    setLoading(true)
     try {
       const { data, error } = await supabase.from("person").select("*");
 
@@ -33,12 +34,12 @@ function Practice() {
     }
   }
 
-  const SubmitFunction = (data: PersonType) => {
+   const SubmitFunction = async (data: PersonType) => {
     console.log(data);
 
     reset();
-    sendPerson(data);
-    getPerson();
+    await sendPerson(data);
+    await getPerson();
   };
 
   useEffect(() => {
@@ -48,7 +49,7 @@ function Practice() {
   }, []);
 
   async function sendPerson(d: PersonType) {
-    
+    setLoading(true)
     console.log(d);
     try {
       const { data, error } = await supabase.from("person").insert(d).select();
@@ -60,6 +61,8 @@ function Practice() {
     } catch (error) {
       console.log(error)
       setError(error as PostgrestError)
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -70,6 +73,9 @@ function Practice() {
       console.log(error);
     }
   }
+
+ 
+
 
   return (
     <>
@@ -86,7 +92,7 @@ function Practice() {
           <p>{error.message}</p>
         </div>
       )}
-      <form onSubmit={handleSubmit(SubmitFunction)}>
+      <form onSubmit={ handleSubmit(SubmitFunction)}>
         <div>
           <label htmlFor="name">username</label>
           <input type="text" id="name" {...register("username")} />
@@ -95,7 +101,7 @@ function Practice() {
           <label htmlFor="score">score:</label>
           <input type="number" {...register("score")} />
         </div>
-        <button type="submit">submit</button>
+        <button disabled={loading} type="submit">submit</button>
       </form>
 
       {loading && <p>please wait ...</p>}
@@ -114,6 +120,7 @@ function Practice() {
           >
             <button
               onClick={async () => {
+                
                 await deletePerson(person.id);
                 await getPerson();
                

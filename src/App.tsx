@@ -262,7 +262,7 @@ function App() {
   return (
     <>
     <Parent/>
-      <Practice></Practice>
+      {/* <Practice></Practice> */}
     </>
   );
 }
