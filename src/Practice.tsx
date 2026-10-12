@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { set, useForm, type ErrorMessageProps } from "react-hook-form";
+import {  useForm, type ErrorMessageProps } from "react-hook-form";
 import { supabase } from "./supabase/supabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
 

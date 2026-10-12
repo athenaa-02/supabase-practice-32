@@ -5,7 +5,6 @@ import { NameContext } from "./Parent";
 function GrandChild() {
   // const name = useContext(NameContext)
   const [domains, setDomains] = useState([]);
-  const [filteredDomains, setFilteredDomains] = useState([])
   const [count, setCount] = useState(0)
   
 
@@ -42,12 +41,13 @@ function GrandChild() {
 
 
 
-  useMemo(() => {
- setFilteredDomains(domains.filter((d) =>d.bids_count > 20)) 
+ const filteredArray = useMemo(() => {
+    console.log('dsghf')
+ return domains.filter((d) =>d.bids_count > 20)
 
   }, [domains]);
 
-  console.log(filteredDomains)
+ 
 
   return <>
 
@@ -55,7 +55,7 @@ function GrandChild() {
 
 
 
-  {filteredDomains.map((domain) =>(
+  {filteredArray.map((domain) =>(
 <div key={domain.id}>
   <h1>{domain.name}</h1>
   <p>{domain.purchase_url}</p>

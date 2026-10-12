@@ -8,10 +8,15 @@ export const NameContext = createContext()
 
 
 function Parent() {
+  const user = {
+    name:'natia',
+    age: 24
+  }
+
   return (
     <>
     <NameContext.Provider value={'natia'}>
-        <Child></Child>
+        <Child user={user}></Child>
     </NameContext.Provider>
     
     </>
