@@ -1,26 +1,28 @@
-import React from 'react'
-import Child from './Child'
-import { createContext } from 'react'
-
-
-export const NameContext = createContext()
-
-
+import Child from "./Child";
+import { useEffect, useState } from "react";
+import { ThemeContext } from "./context/ThemeContext";
 
 function Parent() {
-  const user = {
-    name:'natia',
-    age: 24
-  }
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
+  const handleModeChange = () => {
+    setTheme((prev) => {
+      return prev === "light" ? "dark" : "light";
+    });
+  };
 
   return (
     <>
-    <NameContext.Provider value={'natia'}>
-        <Child user={user}></Child>
-    </NameContext.Provider>
-    
+      <ThemeContext.Provider value={{ theme, handleModeChange }}>
+        <Child></Child>
+      </ThemeContext.Provider>
     </>
-  )
+  );
 }
 
-export default Parent
+export default Parent;
