@@ -2,6 +2,11 @@ import Child from "./Child";
 import { useEffect, useState } from "react";
 import { ThemeContext } from "./context/ThemeContext";
 
+import { useDispatch } from "react-redux";
+import { increment, decrement } from "./redux/counter";
+import store from "./redux/store";
+
+
 function Parent() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
@@ -15,6 +20,13 @@ function Parent() {
       return prev === "light" ? "dark" : "light";
     });
   };
+
+
+
+console.log(store.getState())
+
+
+
 
   return (
     <>

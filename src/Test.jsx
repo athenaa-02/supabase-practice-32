@@ -1,9 +1,21 @@
-import React from "react";
+import  store  from "./redux/store";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { decrement, increment } from "./redux/counter";
+
 
 function Test() {
-//   let text = "dsjhgfjhd";
-//   Math.floor(text);
-//   console.log(text.push('dsjhf'))
+   const dispatch = useDispatch()
+
+   
+   
+   store.dispatch(increment())
+   store.dispatch(increment())
+   store.dispatch(increment())
+   
+   store.dispatch(decrement()) 
+   
+   console.log(store.getState())
 
   return <div>app</div>;
 }
